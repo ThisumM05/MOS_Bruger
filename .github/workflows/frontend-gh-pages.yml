@@ -1,0 +1,49 @@
+name: Deploy Frontend to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - "mos_product_frontend/most_product_frontend/**"
+      - ".github/workflows/frontend-gh-pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: mos_product_frontend/most_product_frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: mos_product_frontend/most_product_frontend
+        run: npm ci
+
+      - name: Build with repo base path
+        working-directory: mos_product_frontend/most_product_frontend
+        run: |
+          export VITE_BASE_PATH="/${GITHUB_REPOSITORY#*/}/"
+          npm run build
+
+      - name: SPA fallback for GitHub Pages
+        working-directory: mos_product_frontend/most_product_frontend
+        run: cp dist/index.html dist/404.html
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: mos_product_frontend/most_product_frontend/dist
