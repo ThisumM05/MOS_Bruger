@@ -1,0 +1,20 @@
+.menu-card-hover {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease !important;
+}
+
+.menu-card-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.menu-card-hover:hover .card-img-top {
+    transform: scale(1.05);
+    /* Slight zoom on image hover */
+}
+
+/* Modal styles - copied/adapted for consistency */
+.blur-backdrop {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.5) !important;
+}

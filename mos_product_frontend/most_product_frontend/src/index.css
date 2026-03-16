@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap');
+
+:root {
+  /* MOS Burger Brand Colors (Refined) */
+  --mos-red: #E60012;
+  /* Primary Action */
+  --mos-green: #009944;
+  /* Freshness / Success */
+  --mos-orange: #FFA500;
+  /* Accents / Deals */
+
+  /* Modern Neutrals */
+  --bg-color: #F9F9F9;
+  /* Clean Off-White Background */
+  --text-main: #2C2C2C;
+  /* Dark Grey for readability */
+  --text-light: #666666;
+  /* Description Text */
+  --white: #FFFFFF;
+  /* Card Backgrounds */
+  --border-light: #E0E0E0;
+
+  /* Shadows */
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+  /* Softer, modern shadow */
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.12);
+
+  /* Fonts */
+  --font-heading: 'Nunito', sans-serif;
+  --font-body: 'Open Sans', sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  background-image: none;
+  /* Removed heavy background for cleaner look */
+  color: var(--text-main);
+  font-family: var(--font-body);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  color: var(--text-main);
+  font-weight: 800;
+  /* Bolder headings */
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--mos-red);
+}

@@ -1,0 +1,347 @@
+/* Global Layout Styles */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+/* Bootstrap Overrides */
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--mos-red) !important;
+  border-color: var(--mos-red) !important;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  border-radius: 50px !important;
+  /* Rounded pill buttons */
+  padding: 10px 24px !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-primary:hover {
+  background-color: #c4000f !important;
+  border-color: #c4000f !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(230, 0, 18, 0.3);
+}
+
+.btn-outline-primary {
+  color: var(--mos-red) !important;
+  border-color: var(--mos-red) !important;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  border-radius: 50px !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--mos-red) !important;
+  color: white !important;
+}
+
+.btn-success {
+  background-color: var(--mos-green) !important;
+  border-color: var(--mos-green) !important;
+  border-radius: 50px !important;
+}
+
+.btn-danger {
+  background-color: var(--mos-red) !important;
+  border-color: var(--mos-red) !important;
+  border-radius: 50px !important;
+}
+
+.btn-outline-danger {
+  color: var(--mos-red) !important;
+  border-color: var(--mos-red) !important;
+  border-radius: 50px !important;
+}
+
+.btn-outline-danger:hover {
+  background-color: var(--mos-red) !important;
+  color: white !important;
+}
+
+/* Navbar Customization */
+.navbar {
+  background-color: var(--bg-color) !important;
+  box-shadow: var(--shadow-sm);
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+}
+
+.navbar-brand {
+  font-family: var(--font-heading);
+  font-weight: 800 !important;
+  color: var(--mos-red) !important;
+  font-size: 1.5rem !important;
+}
+
+.nav-link {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text-main) !important;
+  transition: color 0.2s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--mos-red) !important;
+}
+
+/* Nav Pills (Categories) */
+.nav-pills .nav-link {
+  color: var(--text-light) !important;
+  border-radius: 50px !important;
+  padding: 10px 25px !important;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  background-color: rgba(0, 0, 0, 0.05);
+  /* Light gray bg for inactive tabs */
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+  background-color: var(--mos-red) !important;
+  color: white !important;
+  box-shadow: 0 4px 10px rgba(230, 0, 18, 0.3);
+  transform: translateY(-2px);
+}
+
+.nav-pills .nav-link:hover:not(.active) {
+  background-color: rgba(230, 0, 18, 0.1);
+  /* Light red tint on hover */
+  color: var(--mos-red) !important;
+}
+
+/* Card Styling Override */
+.card {
+  border: none !important;
+  border-radius: 16px !important;
+  box-shadow: var(--shadow-sm);
+  background-color: var(--white);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+/* Form Controls */
+.form-control {
+  border-radius: 12px !important;
+  padding: 12px !important;
+  border: 1px solid #e1e1e1 !important;
+  background-color: #fafafa !important;
+}
+
+.form-control:focus {
+  border-color: var(--mos-red) !important;
+  box-shadow: 0 0 0 4px rgba(230, 0, 18, 0.1) !important;
+  background-color: #fff !important;
+}
+
+/* Text Colors Mapping */
+.text-primary {
+  color: var(--mos-red) !important;
+}
+
+.text-danger {
+  color: var(--mos-red) !important;
+}
+
+.text-success {
+  color: var(--mos-green) !important;
+}
+
+.text-warning {
+  color: var(--mos-yellow) !important;
+}
+
+/* Typography Helpers */
+.font-heading {
+  font-family: var(--font-heading) !important;
+}
+
+.font-body {
+  font-family: var(--font-body) !important;
+}
+
+/* Burger Loader Styles */
+.burger-loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.burger-layers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.burger-bun-top {
+  width: 50px;
+  height: 16px;
+  background: #fbb034;
+  border-radius: 20px 20px 5px 5px;
+  animation: bounce-layer 1s infinite ease-in-out;
+}
+
+.burger-lettuce {
+  width: 56px;
+  height: 8px;
+  background: #8dc63f;
+  border-radius: 10px;
+  animation: bounce-layer 1s infinite ease-in-out 0.1s;
+}
+
+.burger-patty {
+  width: 50px;
+  height: 12px;
+  background: #795548;
+  border-radius: 5px;
+  animation: bounce-layer 1s infinite ease-in-out 0.2s;
+}
+
+.burger-cheese {
+  width: 54px;
+  height: 6px;
+  background: #ffdb58;
+  border-radius: 4px;
+  animation: bounce-layer 1s infinite ease-in-out 0.25s;
+}
+
+.burger-bun-bottom {
+  width: 50px;
+  height: 12px;
+  background: #fbb034;
+  border-radius: 5px 5px 15px 15px;
+  animation: bounce-layer 1s infinite ease-in-out 0.3s;
+}
+
+@keyframes bounce-layer {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.welcome-text {
+  color: #e60012;
+  /* MOS Red */
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+  font-size: 2rem;
+  margin-top: 20px;
+  animation: pulse-text 2s infinite;
+}
+
+@keyframes pulse-text {
+  0% {
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.8;
+  }
+}
+
+/* Category Hover Animation */
+.category-card-wrapper {
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.17, 0.55, 0.55, 1);
+  z-index: 1;
+}
+
+.category-card-wrapper:hover {
+  transform: scale(1.02);
+  z-index: 10;
+}
+
+.floating-images-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.4s ease;
+  transform: translate(-50%, -50%) scale(0.8);
+}
+
+.category-card-wrapper:hover .floating-images-container {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  animation: orbit-circle 10s linear infinite;
+}
+
+@keyframes orbit-circle {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.floating-img {
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
+  transition: transform 0.3s ease;
+  background: transparent;
+}
+
+/* 1: Top */
+.category-card-wrapper:hover .floating-img:nth-child(1) {
+  top: -45px;
+  left: 50%;
+  margin-left: -27.5px;
+  animation: counter-orbit 10s linear infinite;
+}
+
+/* 2: Bottom Right */
+.category-card-wrapper:hover .floating-img:nth-child(2) {
+  top: 50px;
+  left: 80px;
+  animation: counter-orbit 10s linear infinite;
+}
+
+/* 3: Bottom Left */
+.category-card-wrapper:hover .floating-img:nth-child(3) {
+  top: 50px;
+  left: -25px;
+  animation: counter-orbit 10s linear infinite;
+}
+
+@keyframes counter-orbit {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(-360deg);
+  }
+}
+.hover-shadow:hover { box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; transform: translateY(-5px); }
+.transition-all { transition: all 0.3s ease; }
