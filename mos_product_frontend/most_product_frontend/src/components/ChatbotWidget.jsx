@@ -167,7 +167,11 @@ const ChatbotWidget = () => {
                   }
                 }}
               />
-              <Button variant="danger" onClick={handleSend} disabled={isSending}>
+              <Button
+                variant="danger"
+                onClick={handleSend}
+                disabled={isSending}
+              >
                 <FiSend />
               </Button>
             </InputGroup>

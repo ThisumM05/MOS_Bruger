@@ -32,7 +32,9 @@ const StaffOrders = lazy(() => import("./pages/staff/StaffOrders"));
 const ManageOffers = lazy(() => import("./pages/staff/ManageOffers"));
 const AdminLayout = lazy(() => import("./components/admin/AdminLayout"));
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
-const AdminUserManagement = lazy(() => import("./pages/admin/AdminUserManagement"));
+const AdminUserManagement = lazy(
+  () => import("./pages/admin/AdminUserManagement"),
+);
 
 // Protected Route wrapper
 const ProtectedRoute = ({ children }) => {
@@ -73,7 +75,11 @@ const AppContent = () => {
   const isAdminPath = location.pathname.startsWith("/admin");
 
   return (
-    <div className={isAdminPath ? "min-vh-100 bg-light" : "d-flex flex-column min-vh-100"}>
+    <div
+      className={
+        isAdminPath ? "min-vh-100 bg-light" : "d-flex flex-column min-vh-100"
+      }
+    >
       {!isAdminPath && <Header />}
       <main className={isAdminPath ? "" : "flex-grow-1"}>
         <Suspense

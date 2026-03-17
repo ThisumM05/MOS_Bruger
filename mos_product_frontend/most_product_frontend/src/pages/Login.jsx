@@ -1,21 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { FaEnvelope, FaLock, FaUser, FaGoogle, FaFacebookF, FaGithub, FaSpinner, FaExclamationCircle, FaUserTag } from 'react-icons/fa';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { login, register, clearError } from '../redux/slices/userSlice';
+import React, { useState, useEffect } from "react";
+import {
+  FaEnvelope,
+  FaLock,
+  FaUser,
+  FaGoogle,
+  FaFacebookF,
+  FaGithub,
+  FaSpinner,
+  FaExclamationCircle,
+  FaUserTag,
+} from "react-icons/fa";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { login, register, clearError } from "../redux/slices/userSlice";
 
 const Login = () => {
   const [isRightPanelActive, setIsRightPanelActive] = useState(false);
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, isAuthenticated, user } = useSelector((state) => state.user);
+  const { loading, error, isAuthenticated, user } = useSelector(
+    (state) => state.user,
+  );
 
-  const [loginData, setLoginData] = useState({ email: '', password: '', role: 'CUSTOMER' });
-  const [registerData, setRegisterData] = useState({ username: '', email: '', password: '' });
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+    role: "CUSTOMER",
+  });
+  const [registerData, setRegisterData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
 
   useEffect(() => {
-    if (location.pathname === '/signup') {
+    if (location.pathname === "/signup") {
       setIsRightPanelActive(true);
     }
     dispatch(clearError());
@@ -24,12 +44,12 @@ const Login = () => {
   useEffect(() => {
     if (isAuthenticated) {
       // Redirect based on role
-      if (user?.role === 'STAFF') {
-        navigate('/staff-dashboard');
-      } else if (user?.role === 'ADMIN') {
-        navigate('/admin-dashboard'); 
+      if (user?.role === "STAFF") {
+        navigate("/staff-dashboard");
+      } else if (user?.role === "ADMIN") {
+        navigate("/admin-dashboard");
       } else {
-        navigate('/');
+        navigate("/");
       }
     }
   }, [isAuthenticated, user, navigate]);
@@ -39,8 +59,10 @@ const Login = () => {
     setIsRightPanelActive(toRight);
   };
 
-  const handleLoginChange = (e) => setLoginData({ ...loginData, [e.target.name]: e.target.value });
-  const handleRegisterChange = (e) => setRegisterData({ ...registerData, [e.target.name]: e.target.value });
+  const handleLoginChange = (e) =>
+    setLoginData({ ...loginData, [e.target.name]: e.target.value });
+  const handleRegisterChange = (e) =>
+    setRegisterData({ ...registerData, [e.target.name]: e.target.value });
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
@@ -379,42 +401,87 @@ const Login = () => {
       `}</style>
 
       <div className="auth-page-wrapper">
-        <div className={`auth-container ${isRightPanelActive ? 'right-panel-active' : ''}`}>
-          
+        <div
+          className={`auth-container ${isRightPanelActive ? "right-panel-active" : ""}`}
+        >
           {/* Sign Up Form */}
           <div className="auth-form-container sign-up-container">
             <form className="auth-form" onSubmit={handleRegisterSubmit}>
               <h1 className="auth-title">Create Account</h1>
-              
+
               <div className="social-container">
-                <a href="#facebook" onClick={(e)=>e.preventDefault()} className="social"><FaFacebookF /></a>
-                <a href="#google" onClick={(e)=>e.preventDefault()} className="social"><FaGoogle /></a>
-                <a href="#github" onClick={(e)=>e.preventDefault()} className="social"><FaGithub /></a>
+                <a
+                  href="#facebook"
+                  onClick={(e) => e.preventDefault()}
+                  className="social"
+                >
+                  <FaFacebookF />
+                </a>
+                <a
+                  href="#google"
+                  onClick={(e) => e.preventDefault()}
+                  className="social"
+                >
+                  <FaGoogle />
+                </a>
+                <a
+                  href="#github"
+                  onClick={(e) => e.preventDefault()}
+                  className="social"
+                >
+                  <FaGithub />
+                </a>
               </div>
-              <span className="auth-span">or use your email for registration</span>
+              <span className="auth-span">
+                or use your email for registration
+              </span>
 
               <div className="auth-input-group">
                 <FaUser className="auth-icon" />
-                <input type="text" name="username" className="auth-input" placeholder="Username" required value={registerData.username} onChange={handleRegisterChange} />
+                <input
+                  type="text"
+                  name="username"
+                  className="auth-input"
+                  placeholder="Username"
+                  required
+                  value={registerData.username}
+                  onChange={handleRegisterChange}
+                />
               </div>
               <div className="auth-input-group">
                 <FaEnvelope className="auth-icon" />
-                <input type="email" name="email" className="auth-input" placeholder="Email" required value={registerData.email} onChange={handleRegisterChange} />
+                <input
+                  type="email"
+                  name="email"
+                  className="auth-input"
+                  placeholder="Email"
+                  required
+                  value={registerData.email}
+                  onChange={handleRegisterChange}
+                />
               </div>
               <div className="auth-input-group">
                 <FaLock className="auth-icon" />
-                <input type="password" name="password" className="auth-input" placeholder="Password" required value={registerData.password} onChange={handleRegisterChange} />
+                <input
+                  type="password"
+                  name="password"
+                  className="auth-input"
+                  placeholder="Password"
+                  required
+                  value={registerData.password}
+                  onChange={handleRegisterChange}
+                />
               </div>
-              
+
               {error && isRightPanelActive && (
                 <div className="error-message">
                   <FaExclamationCircle /> {error}
                 </div>
               )}
-              
+
               <button type="submit" className="auth-btn" disabled={loading}>
                 {loading && <FaSpinner className="loading-spinner" />}
-                {loading ? 'Registering...' : 'Sign Up'}
+                {loading ? "Registering..." : "Sign Up"}
               </button>
             </form>
           </div>
@@ -423,22 +490,53 @@ const Login = () => {
           <div className="auth-form-container sign-in-container">
             <form className="auth-form" onSubmit={handleLoginSubmit}>
               <h1 className="auth-title">Sign In</h1>
-              
+
               <div className="social-container">
-                <a href="#facebook" onClick={(e)=>e.preventDefault()} className="social"><FaFacebookF /></a>
-                <a href="#google" onClick={(e)=>e.preventDefault()} className="social"><FaGoogle /></a>
-                <a href="#github" onClick={(e)=>e.preventDefault()} className="social"><FaGithub /></a>
+                <a
+                  href="#facebook"
+                  onClick={(e) => e.preventDefault()}
+                  className="social"
+                >
+                  <FaFacebookF />
+                </a>
+                <a
+                  href="#google"
+                  onClick={(e) => e.preventDefault()}
+                  className="social"
+                >
+                  <FaGoogle />
+                </a>
+                <a
+                  href="#github"
+                  onClick={(e) => e.preventDefault()}
+                  className="social"
+                >
+                  <FaGithub />
+                </a>
               </div>
               <span className="auth-span">or use your account</span>
 
               <div className="auth-input-group">
                 <FaEnvelope className="auth-icon" />
-                <input type="email" name="email" className="auth-input" placeholder="Email" required value={loginData.email} onChange={handleLoginChange} />
+                <input
+                  type="email"
+                  name="email"
+                  className="auth-input"
+                  placeholder="Email"
+                  required
+                  value={loginData.email}
+                  onChange={handleLoginChange}
+                />
               </div>
 
               <div className="auth-input-group">
                 <FaUserTag className="auth-icon" />
-                <select name="role" className="auth-input select-input" value={loginData.role} onChange={handleLoginChange}>
+                <select
+                  name="role"
+                  className="auth-input select-input"
+                  value={loginData.role}
+                  onChange={handleLoginChange}
+                >
                   <option value="CUSTOMER">Customer</option>
                   <option value="STAFF">Staff</option>
                   <option value="ADMIN">Admin</option>
@@ -447,11 +545,25 @@ const Login = () => {
 
               <div className="auth-input-group">
                 <FaLock className="auth-icon" />
-                <input type="password" name="password" className="auth-input" placeholder="Password" required value={loginData.password} onChange={handleLoginChange} />
+                <input
+                  type="password"
+                  name="password"
+                  className="auth-input"
+                  placeholder="Password"
+                  required
+                  value={loginData.password}
+                  onChange={handleLoginChange}
+                />
               </div>
 
-              <a href="#forgot" onClick={(e)=>e.preventDefault()} className="forgot-password">Forgot your password?</a>
-              
+              <a
+                href="#forgot"
+                onClick={(e) => e.preventDefault()}
+                className="forgot-password"
+              >
+                Forgot your password?
+              </a>
+
               {error && !isRightPanelActive && (
                 <div className="error-message">
                   <FaExclamationCircle /> {error}
@@ -460,7 +572,7 @@ const Login = () => {
 
               <button type="submit" className="auth-btn" disabled={loading}>
                 {loading && <FaSpinner className="loading-spinner" />}
-                {loading ? 'Logging In...' : 'Log In'}
+                {loading ? "Logging In..." : "Log In"}
               </button>
             </form>
           </div>
@@ -471,8 +583,14 @@ const Login = () => {
               {/* Left Overlay (shown when Sign Up active) */}
               <div className="auth-overlay-panel auth-overlay-left">
                 <h1 className="overlay-title">Welcome Back!</h1>
-                <p className="auth-p">To keep connected with us please login with your personal info</p>
-                <button type="button" className="auth-btn ghost" onClick={() => togglePanel(false)}>
+                <p className="auth-p">
+                  To keep connected with us please login with your personal info
+                </p>
+                <button
+                  type="button"
+                  className="auth-btn ghost"
+                  onClick={() => togglePanel(false)}
+                >
                   Sign In
                 </button>
               </div>
@@ -480,14 +598,19 @@ const Login = () => {
               {/* Right Overlay (shown when Sign In active) */}
               <div className="auth-overlay-panel auth-overlay-right">
                 <h1 className="overlay-title">Hello, Friend!</h1>
-                <p className="auth-p">Enter your personal details and start your journey with us</p>
-                <button type="button" className="auth-btn ghost" onClick={() => togglePanel(true)}>
+                <p className="auth-p">
+                  Enter your personal details and start your journey with us
+                </p>
+                <button
+                  type="button"
+                  className="auth-btn ghost"
+                  onClick={() => togglePanel(true)}
+                >
                   Sign Up
                 </button>
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </>

@@ -135,7 +135,6 @@ const Header = () => {
           {/* Right Icons & Search */}
           <div className="d-flex align-items-center gap-4">
             {/* Search Bar - hidden for regular customers */}
-          
 
             {/* Cart / Orders Icon */}
             {isAuthenticated && !isAdmin && (
@@ -163,8 +162,6 @@ const Header = () => {
                 )}
               </div>
             )}
-
-      
 
             {/* Profile / Logout */}
             {isAuthenticated ? (

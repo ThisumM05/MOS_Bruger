@@ -33,7 +33,12 @@ const AdminLayout = () => {
     <div className="d-flex min-vh-100 bg-light">
       <aside
         className="bg-dark text-white d-flex flex-column p-4"
-        style={{ width: "280px", minHeight: "100vh", position: "sticky", top: 0 }}
+        style={{
+          width: "280px",
+          minHeight: "100vh",
+          position: "sticky",
+          top: 0,
+        }}
       >
         <div className="d-flex align-items-center mb-4 pb-3 border-bottom border-secondary">
           <div

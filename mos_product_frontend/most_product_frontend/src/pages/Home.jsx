@@ -545,7 +545,8 @@ const Home = () => {
             <div className="text-muted">Loading recommendations...</div>
           ) : recommendedItems.length === 0 ? (
             <div className="text-muted">
-              No personalized recommendations yet. Place a few orders to improve suggestions.
+              No personalized recommendations yet. Place a few orders to improve
+              suggestions.
             </div>
           ) : (
             <Row className="gy-4">
@@ -597,7 +598,11 @@ const Home = () => {
                         {item.description}
                       </Card.Text>
 
-                      <Badge bg="warning" text="dark" className="align-self-start mb-3">
+                      <Badge
+                        bg="warning"
+                        text="dark"
+                        className="align-self-start mb-3"
+                      >
                         {item.reason || "Recommended"}
                       </Badge>
 

@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Container, Card, Table, Badge, Button, Form, Modal } from "react-bootstrap";
+import {
+  Container,
+  Card,
+  Table,
+  Badge,
+  Button,
+  Form,
+  Modal,
+} from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -17,12 +25,12 @@ const StaffOrders = () => {
     try {
       const [ordersRes, usersRes] = await Promise.all([
         axios.get("http://localhost:8000/api/orders/orders/"),
-        axios.get("http://localhost:8000/api/users/users/")
+        axios.get("http://localhost:8000/api/users/users/"),
       ]);
       const data = ordersRes.data.value || ordersRes.data || [];
       const usersData = usersRes.data.value || usersRes.data || [];
       setOrders(data);
-      setRiders(usersData.filter(u => u.role === "DELIVERY"));
+      setRiders(usersData.filter((u) => u.role === "DELIVERY"));
     } catch (err) {
       console.error(err);
     }
@@ -53,7 +61,8 @@ const StaffOrders = () => {
     return riders.filter((rider) => {
       const bikeId = getRiderBikeId(rider);
       if (!bikeId) return false;
-      if (currentlyAssignedBike && bikeId === currentlyAssignedBike) return true;
+      if (currentlyAssignedBike && bikeId === currentlyAssignedBike)
+        return true;
       return !busyBikeIds.has(bikeId);
     });
   };
@@ -61,8 +70,8 @@ const StaffOrders = () => {
   const handleClaimOrder = async (orderId) => {
     try {
       await axios.patch(`http://localhost:8000/api/orders/orders/${orderId}/`, {
-        assigned_staff: user?.id || null, 
-        status: "PROCESSING" 
+        assigned_staff: user?.id || null,
+        status: "PROCESSING",
       });
       fetchOrdersAndRiders();
     } catch (err) {
@@ -72,7 +81,9 @@ const StaffOrders = () => {
 
   const handleAssignRiderClick = (order) => {
     setSelectedOrder(order);
-    const currentRider = riders.find((r) => getRiderBikeId(r) === order.assigned_biker);
+    const currentRider = riders.find(
+      (r) => getRiderBikeId(r) === order.assigned_biker,
+    );
     setSelectedRider(currentRider?.id || "");
     setShowModal(true);
   };
@@ -80,10 +91,13 @@ const StaffOrders = () => {
   const submitAssignRider = async () => {
     if (!selectedOrder || !selectedRider) return;
     try {
-      await axios.patch(`http://localhost:8000/api/orders/orders/${selectedOrder.id}/`, {
-        assigned_biker: parseInt(selectedRider),
-        status: "WAITING_FOR_RIDER"
-      });
+      await axios.patch(
+        `http://localhost:8000/api/orders/orders/${selectedOrder.id}/`,
+        {
+          assigned_biker: parseInt(selectedRider),
+          status: "WAITING_FOR_RIDER",
+        },
+      );
       setShowModal(false);
       fetchOrdersAndRiders();
     } catch (err) {
@@ -95,11 +109,16 @@ const StaffOrders = () => {
   const getStatusBadge = (status) => {
     switch (status) {
       case "COMPLETED":
-      case "DELIVERED": return "success";
-      case "PENDING": return "secondary";
-      case "PROCESSING": return "info";
-      case "WAITING_FOR_RIDER": return "warning";
-      default: return "primary";
+      case "DELIVERED":
+        return "success";
+      case "PENDING":
+        return "secondary";
+      case "PROCESSING":
+        return "info";
+      case "WAITING_FOR_RIDER":
+        return "warning";
+      default:
+        return "primary";
     }
   };
 
@@ -123,51 +142,109 @@ const StaffOrders = () => {
             </thead>
             <tbody>
               {orders.map((order) => {
-                const isMyOrder = order.assigned_staff === user?.id || (user?.username && order.assigned_staff === user?.username);
-                const assignedRiderObj = riders.find(r => getRiderBikeId(r) === order.assigned_biker);
+                const isMyOrder =
+                  order.assigned_staff === user?.id ||
+                  (user?.username && order.assigned_staff === user?.username);
+                const assignedRiderObj = riders.find(
+                  (r) => getRiderBikeId(r) === order.assigned_biker,
+                );
                 return (
-                <tr key={order.id} style={{ backgroundColor: isMyOrder ? "#fffdf5" : "transparent" }}>
-                  <td className="fw-bold">#{order.id}</td>
-                  <td>{order.customer || order.email || "Guest"}</td>
-                  <td>{order.street_address ? `${order.street_address}, ${order.city}` : "-"}</td>
-                  <td>${parseFloat(order.total_amount || order.total_price || 0).toFixed(2)}</td>
-                  <td>
-                    <Badge bg={getStatusBadge(order.status)} text={["WAITING_FOR_RIDER", "PENDING"].includes(order.status) ? "dark" : "light"}>
-                      {order.status || "UNKNOWN"}
-                    </Badge>
-                  </td>
-                  <td>
-                    {order.assigned_staff ? (
-                      isMyOrder ? <Badge bg="danger">Me</Badge> : <span className="text-muted">Staff #{order.assigned_staff}</span>
-                    ) : (
-                       <span className="text-muted fst-italic">Unassigned</span>
-                    )}
-                  </td>
-                  <td>
-                    {assignedRiderObj ? <span className="text-success fw-bold">{assignedRiderObj.username}</span> : <span className="text-muted">Unassigned</span>}
-                  </td>
-                  <td>
-                    <div className="d-flex gap-2">
-                       {!order.assigned_staff && (
-                         <Button variant="outline-primary" size="sm" onClick={() => handleClaimOrder(order.id)}>
+                  <tr
+                    key={order.id}
+                    style={{
+                      backgroundColor: isMyOrder ? "#fffdf5" : "transparent",
+                    }}
+                  >
+                    <td className="fw-bold">#{order.id}</td>
+                    <td>{order.customer || order.email || "Guest"}</td>
+                    <td>
+                      {order.street_address
+                        ? `${order.street_address}, ${order.city}`
+                        : "-"}
+                    </td>
+                    <td>
+                      $
+                      {parseFloat(
+                        order.total_amount || order.total_price || 0,
+                      ).toFixed(2)}
+                    </td>
+                    <td>
+                      <Badge
+                        bg={getStatusBadge(order.status)}
+                        text={
+                          ["WAITING_FOR_RIDER", "PENDING"].includes(
+                            order.status,
+                          )
+                            ? "dark"
+                            : "light"
+                        }
+                      >
+                        {order.status || "UNKNOWN"}
+                      </Badge>
+                    </td>
+                    <td>
+                      {order.assigned_staff ? (
+                        isMyOrder ? (
+                          <Badge bg="danger">Me</Badge>
+                        ) : (
+                          <span className="text-muted">
+                            Staff #{order.assigned_staff}
+                          </span>
+                        )
+                      ) : (
+                        <span className="text-muted fst-italic">
+                          Unassigned
+                        </span>
+                      )}
+                    </td>
+                    <td>
+                      {assignedRiderObj ? (
+                        <span className="text-success fw-bold">
+                          {assignedRiderObj.username}
+                        </span>
+                      ) : (
+                        <span className="text-muted">Unassigned</span>
+                      )}
+                    </td>
+                    <td>
+                      <div className="d-flex gap-2">
+                        {!order.assigned_staff && (
+                          <Button
+                            variant="outline-primary"
+                            size="sm"
+                            onClick={() => handleClaimOrder(order.id)}
+                          >
                             Claim
                           </Button>
-                       )}
-                       {!order.assigned_biker && order.status !== "COMPLETED" && order.status !== "DELIVERED" && (
-                          <Button variant="outline-warning" size="sm" onClick={() => handleAssignRiderClick(order)}>
-                             Assign Rider
-                          </Button>
-                       )}
-                       <Button variant="outline-danger" size="sm" onClick={() => navigate(`/orders/${order.id}`)}>
-                         View
-                       </Button>
-                    </div>
-                  </td>
-                </tr>
-              )})}
+                        )}
+                        {!order.assigned_biker &&
+                          order.status !== "COMPLETED" &&
+                          order.status !== "DELIVERED" && (
+                            <Button
+                              variant="outline-warning"
+                              size="sm"
+                              onClick={() => handleAssignRiderClick(order)}
+                            >
+                              Assign Rider
+                            </Button>
+                          )}
+                        <Button
+                          variant="outline-danger"
+                          size="sm"
+                          onClick={() => navigate(`/orders/${order.id}`)}
+                        >
+                          View
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
               {orders.length === 0 && (
                 <tr>
-                  <td colSpan="8" className="text-center py-4 text-muted">No orders available</td>
+                  <td colSpan="8" className="text-center py-4 text-muted">
+                    No orders available
+                  </td>
                 </tr>
               )}
             </tbody>
@@ -182,17 +259,30 @@ const StaffOrders = () => {
         <Modal.Body>
           <Form.Group>
             <Form.Label>Select Rider</Form.Label>
-            <Form.Select value={selectedRider} onChange={(e) => setSelectedRider(e.target.value)}>
+            <Form.Select
+              value={selectedRider}
+              onChange={(e) => setSelectedRider(e.target.value)}
+            >
               <option value="">Select a rider...</option>
-              {getAvailableRiders().map(r => (
-                <option key={r.id} value={r.id}>{r.username} (ID: {r.id})</option>
+              {getAvailableRiders().map((r) => (
+                <option key={r.id} value={r.id}>
+                  {r.username} (ID: {r.id})
+                </option>
               ))}
             </Form.Select>
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
-          <Button variant="primary" onClick={submitAssignRider} disabled={!selectedRider}>Assign</Button>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Cancel
+          </Button>
+          <Button
+            variant="primary"
+            onClick={submitAssignRider}
+            disabled={!selectedRider}
+          >
+            Assign
+          </Button>
         </Modal.Footer>
       </Modal>
     </Container>

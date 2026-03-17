@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Card, Col, Form, Row, Table, Badge } from "react-bootstrap";
-import { FiDollarSign, FiShoppingBag, FiUsers, FiTrendingUp } from "react-icons/fi";
+import {
+  FiDollarSign,
+  FiShoppingBag,
+  FiUsers,
+  FiTrendingUp,
+} from "react-icons/fi";
 import {
   ResponsiveContainer,
   BarChart,
@@ -31,7 +36,9 @@ const AdminDashboard = () => {
         const [ordersRes, usersRes, forecastRes] = await Promise.all([
           axios.get("http://localhost:8000/api/orders/orders/"),
           axios.get("http://localhost:8000/api/users/users/"),
-          axios.get("http://localhost:8000/api/orders/orders/demand-forecast/?history_days=120&horizon_days=7"),
+          axios.get(
+            "http://localhost:8000/api/orders/orders/demand-forecast/?history_days=120&horizon_days=7",
+          ),
         ]);
         setOrders(ordersRes.data.value || ordersRes.data || []);
         setUsers(usersRes.data.value || usersRes.data || []);
@@ -60,35 +67,50 @@ const AdminDashboard = () => {
   };
 
   const filteredOrders = orders.filter((order) => {
-    if (filters.status !== "ALL" && order.status !== filters.status) return false;
-    if (filters.staffId !== "ALL" && String(order.assigned_staff) !== filters.staffId) return false;
+    if (filters.status !== "ALL" && order.status !== filters.status)
+      return false;
+    if (
+      filters.staffId !== "ALL" &&
+      String(order.assigned_staff) !== filters.staffId
+    )
+      return false;
     return isWithinPeriod(order);
   });
 
   const totalOrdersHandled = filteredOrders.length;
   const totalRevenue = filteredOrders.reduce(
-    (sum, order) => sum + parseFloat(order.total_amount || order.total_price || 0),
+    (sum, order) =>
+      sum + parseFloat(order.total_amount || order.total_price || 0),
     0,
   );
   const totalCustomersServed = new Set(
-    filteredOrders.map((order) => order.customer || order.email || `guest-${order.id}`),
+    filteredOrders.map(
+      (order) => order.customer || order.email || `guest-${order.id}`,
+    ),
   ).size;
 
   const staffRows = staffUsers.map((staff) => {
-    const handledOrders = filteredOrders.filter((order) => order.assigned_staff === staff.id);
+    const handledOrders = filteredOrders.filter(
+      (order) => order.assigned_staff === staff.id,
+    );
     const revenue = handledOrders.reduce(
-      (sum, order) => sum + parseFloat(order.total_amount || order.total_price || 0),
+      (sum, order) =>
+        sum + parseFloat(order.total_amount || order.total_price || 0),
       0,
     );
 
     return {
       id: staff.id,
-      name: `${staff.first_name || ""} ${staff.last_name || ""}`.trim() || staff.username,
+      name:
+        `${staff.first_name || ""} ${staff.last_name || ""}`.trim() ||
+        staff.username,
       email: staff.email,
       ordersHandled: handledOrders.length,
       revenue,
       customers: new Set(
-        handledOrders.map((order) => order.customer || order.email || `guest-${order.id}`),
+        handledOrders.map(
+          (order) => order.customer || order.email || `guest-${order.id}`,
+        ),
       ).size,
       orderIds: handledOrders.map((order) => `#${order.id}`).join(", ") || "-",
     };
@@ -100,29 +122,37 @@ const AdminDashboard = () => {
     revenue: Number(row.revenue.toFixed(2)),
   }));
 
-  const demandForecastChart = (forecastData?.overall?.forecast || []).map((point) => ({
-    date: point.date,
-    predicted: point.predicted_qty,
-  }));
+  const demandForecastChart = (forecastData?.overall?.forecast || []).map(
+    (point) => ({
+      date: point.date,
+      predicted: point.predicted_qty,
+    }),
+  );
 
-  const topMenuForecastRows = (forecastData?.menu_item_forecasts || []).map((entry) => ({
-    name: entry.menu_name,
-    predictedTotal: entry.forecast_total_qty,
-    modelUsed: entry.model_used,
-  }));
+  const topMenuForecastRows = (forecastData?.menu_item_forecasts || []).map(
+    (entry) => ({
+      name: entry.menu_name,
+      predictedTotal: entry.forecast_total_qty,
+      modelUsed: entry.model_used,
+    }),
+  );
 
-  const topToppingForecastRows = (forecastData?.topping_forecasts || []).map((entry) => ({
-    name: entry.topping_name,
-    predictedTotal: entry.forecast_total_qty,
-    modelUsed: entry.model_used,
-  }));
+  const topToppingForecastRows = (forecastData?.topping_forecasts || []).map(
+    (entry) => ({
+      name: entry.topping_name,
+      predictedTotal: entry.forecast_total_qty,
+      modelUsed: entry.model_used,
+    }),
+  );
 
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h2 className="mb-1">Admin Dashboard</h2>
-          <p className="text-muted mb-0">Overview of staff performance, orders, and revenue.</p>
+          <p className="text-muted mb-0">
+            Overview of staff performance, orders, and revenue.
+          </p>
         </div>
       </div>
 
@@ -132,7 +162,12 @@ const AdminDashboard = () => {
             <Col md={4}>
               <Form.Group>
                 <Form.Label>Status</Form.Label>
-                <Form.Select value={filters.status} onChange={(e) => setFilters((prev) => ({ ...prev, status: e.target.value }))}>
+                <Form.Select
+                  value={filters.status}
+                  onChange={(e) =>
+                    setFilters((prev) => ({ ...prev, status: e.target.value }))
+                  }
+                >
                   <option value="ALL">All statuses</option>
                   <option value="PENDING">Pending</option>
                   <option value="PROCESSING">Processing</option>
@@ -145,11 +180,17 @@ const AdminDashboard = () => {
             <Col md={4}>
               <Form.Group>
                 <Form.Label>Staff Member</Form.Label>
-                <Form.Select value={filters.staffId} onChange={(e) => setFilters((prev) => ({ ...prev, staffId: e.target.value }))}>
+                <Form.Select
+                  value={filters.staffId}
+                  onChange={(e) =>
+                    setFilters((prev) => ({ ...prev, staffId: e.target.value }))
+                  }
+                >
                   <option value="ALL">All staff</option>
                   {staffUsers.map((staff) => (
                     <option key={staff.id} value={staff.id}>
-                      {`${staff.first_name || ""} ${staff.last_name || ""}`.trim() || staff.username}
+                      {`${staff.first_name || ""} ${staff.last_name || ""}`.trim() ||
+                        staff.username}
                     </option>
                   ))}
                 </Form.Select>
@@ -158,7 +199,12 @@ const AdminDashboard = () => {
             <Col md={4}>
               <Form.Group>
                 <Form.Label>Period</Form.Label>
-                <Form.Select value={filters.period} onChange={(e) => setFilters((prev) => ({ ...prev, period: e.target.value }))}>
+                <Form.Select
+                  value={filters.period}
+                  onChange={(e) =>
+                    setFilters((prev) => ({ ...prev, period: e.target.value }))
+                  }
+                >
                   <option value="ALL">All time</option>
                   <option value="TODAY">Today</option>
                   <option value="WEEK">Last 7 days</option>
@@ -212,15 +258,35 @@ const AdminDashboard = () => {
         </Card.Header>
         <Card.Body style={{ height: "360px" }}>
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 10 }}>
+            <BarChart
+              data={chartData}
+              margin={{ top: 20, right: 30, left: 0, bottom: 10 }}
+            >
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="name" axisLine={false} tickLine={false} />
               <YAxis yAxisId="left" axisLine={false} tickLine={false} />
-              <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} />
+              <YAxis
+                yAxisId="right"
+                orientation="right"
+                axisLine={false}
+                tickLine={false}
+              />
               <Tooltip />
               <Legend />
-              <Bar yAxisId="left" dataKey="orders" name="Orders" fill="#d82b2b" radius={[4, 4, 0, 0]} />
-              <Bar yAxisId="right" dataKey="revenue" name="Revenue" fill="#198754" radius={[4, 4, 0, 0]} />
+              <Bar
+                yAxisId="left"
+                dataKey="orders"
+                name="Orders"
+                fill="#d82b2b"
+                radius={[4, 4, 0, 0]}
+              />
+              <Bar
+                yAxisId="right"
+                dataKey="revenue"
+                name="Revenue"
+                fill="#198754"
+                radius={[4, 4, 0, 0]}
+              />
             </BarChart>
           </ResponsiveContainer>
         </Card.Body>
@@ -236,12 +302,22 @@ const AdminDashboard = () => {
             <Card.Body style={{ height: "320px" }}>
               {demandForecastChart.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={demandForecastChart} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                  <LineChart
+                    data={demandForecastChart}
+                    margin={{ top: 10, right: 20, left: 0, bottom: 0 }}
+                  >
                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
                     <XAxis dataKey="date" axisLine={false} tickLine={false} />
                     <YAxis axisLine={false} tickLine={false} />
                     <Tooltip />
-                    <Line type="monotone" dataKey="predicted" name="Predicted Qty" stroke="#d82b2b" strokeWidth={3} dot={{ r: 4 }} />
+                    <Line
+                      type="monotone"
+                      dataKey="predicted"
+                      name="Predicted Qty"
+                      stroke="#d82b2b"
+                      strokeWidth={3}
+                      dot={{ r: 4 }}
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               ) : (
@@ -258,9 +334,15 @@ const AdminDashboard = () => {
             </Card.Header>
             <Card.Body>
               <p className="mb-2 text-muted small">Model Used</p>
-              <h6 className="mb-3">{forecastData?.overall?.model_used || "N/A"}</h6>
-              <p className="mb-2 text-muted small">Predicted Total Demand (Next 7 Days)</p>
-              <h3 className="mb-3 text-danger">{forecastData?.overall?.forecast_total_qty || 0}</h3>
+              <h6 className="mb-3">
+                {forecastData?.overall?.model_used || "N/A"}
+              </h6>
+              <p className="mb-2 text-muted small">
+                Predicted Total Demand (Next 7 Days)
+              </p>
+              <h3 className="mb-3 text-danger">
+                {forecastData?.overall?.forecast_total_qty || 0}
+              </h3>
               <p className="mb-2 text-muted small">History Window</p>
               <h6 className="mb-0">{forecastData?.history_days || 0} days</h6>
             </Card.Body>
@@ -293,7 +375,9 @@ const AdminDashboard = () => {
                   ))}
                   {topMenuForecastRows.length === 0 && (
                     <tr>
-                      <td colSpan="3" className="text-center py-3 text-muted">No menu forecast data.</td>
+                      <td colSpan="3" className="text-center py-3 text-muted">
+                        No menu forecast data.
+                      </td>
                     </tr>
                   )}
                 </tbody>
@@ -326,7 +410,9 @@ const AdminDashboard = () => {
                   ))}
                   {topToppingForecastRows.length === 0 && (
                     <tr>
-                      <td colSpan="3" className="text-center py-3 text-muted">No topping forecast data.</td>
+                      <td colSpan="3" className="text-center py-3 text-muted">
+                        No topping forecast data.
+                      </td>
                     </tr>
                   )}
                 </tbody>
@@ -357,7 +443,9 @@ const AdminDashboard = () => {
                 <tr key={row.id}>
                   <td className="fw-semibold">{row.name}</td>
                   <td>{row.email}</td>
-                  <td><Badge bg="danger">{row.ordersHandled}</Badge></td>
+                  <td>
+                    <Badge bg="danger">{row.ordersHandled}</Badge>
+                  </td>
                   <td>${row.revenue.toFixed(2)}</td>
                   <td>{row.customers}</td>
                   <td className="text-muted small">{row.orderIds}</td>
@@ -365,7 +453,9 @@ const AdminDashboard = () => {
               ))}
               {staffRows.length === 0 && (
                 <tr>
-                  <td colSpan="6" className="text-center py-4 text-muted">No staff records found.</td>
+                  <td colSpan="6" className="text-center py-4 text-muted">
+                    No staff records found.
+                  </td>
                 </tr>
               )}
             </tbody>
