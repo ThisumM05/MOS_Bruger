@@ -20,7 +20,7 @@ import axios from "axios";
 const Menu = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isAuthenticated } = useSelector((state) => state.user);
+  const { isAuthenticated, user } = useSelector((state) => state.user);
 
   const [categories, setCategories] = useState([]);
   const [toppings, setToppings] = useState([]);
@@ -87,6 +87,10 @@ const Menu = () => {
   };
 
   const handleShowModal = (item, catId) => {
+    if (user?.role === "ADMIN") {
+      return;
+    }
+
     if (!isAuthenticated) {
       navigate("/login");
       return;

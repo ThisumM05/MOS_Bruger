@@ -32,6 +32,32 @@ const StaffOrders = () => {
     fetchOrdersAndRiders();
   }, []);
 
+  const getRiderBikeId = (rider) => rider?.profile?.bike || null;
+
+  const isOrderActiveForRider = (order) => {
+    return !["COMPLETED", "CANCELLED", "DELIVERED"].includes(order.status);
+  };
+
+  const getBusyBikeIds = () => {
+    return new Set(
+      orders
+        .filter((order) => order.assigned_biker && isOrderActiveForRider(order))
+        .map((order) => order.assigned_biker),
+    );
+  };
+
+  const getAvailableRiders = () => {
+    const busyBikeIds = getBusyBikeIds();
+    const currentlyAssignedBike = selectedOrder?.assigned_biker || null;
+
+    return riders.filter((rider) => {
+      const bikeId = getRiderBikeId(rider);
+      if (!bikeId) return false;
+      if (currentlyAssignedBike && bikeId === currentlyAssignedBike) return true;
+      return !busyBikeIds.has(bikeId);
+    });
+  };
+
   const handleClaimOrder = async (orderId) => {
     try {
       await axios.patch(`http://localhost:8000/api/orders/orders/${orderId}/`, {
@@ -46,7 +72,8 @@ const StaffOrders = () => {
 
   const handleAssignRiderClick = (order) => {
     setSelectedOrder(order);
-    setSelectedRider(order.assigned_biker || "");
+    const currentRider = riders.find((r) => getRiderBikeId(r) === order.assigned_biker);
+    setSelectedRider(currentRider?.id || "");
     setShowModal(true);
   };
 
@@ -97,7 +124,7 @@ const StaffOrders = () => {
             <tbody>
               {orders.map((order) => {
                 const isMyOrder = order.assigned_staff === user?.id || (user?.username && order.assigned_staff === user?.username);
-                const assignedRiderObj = riders.find(r => r.id === order.assigned_biker);
+                const assignedRiderObj = riders.find(r => getRiderBikeId(r) === order.assigned_biker);
                 return (
                 <tr key={order.id} style={{ backgroundColor: isMyOrder ? "#fffdf5" : "transparent" }}>
                   <td className="fw-bold">#{order.id}</td>
@@ -157,7 +184,7 @@ const StaffOrders = () => {
             <Form.Label>Select Rider</Form.Label>
             <Form.Select value={selectedRider} onChange={(e) => setSelectedRider(e.target.value)}>
               <option value="">Select a rider...</option>
-              {riders.map(r => (
+              {getAvailableRiders().map(r => (
                 <option key={r.id} value={r.id}>{r.username} (ID: {r.id})</option>
               ))}
             </Form.Select>

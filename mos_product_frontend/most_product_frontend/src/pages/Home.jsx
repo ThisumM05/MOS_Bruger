@@ -11,16 +11,20 @@ import {
 import { GiFrenchFries, GiChefToque } from "react-icons/gi";
 import { FiShoppingCart, FiChevronRight, FiTag } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/slices/cartSlice";
+import { menuAPI } from "../services/api";
 import axios from "axios";
 
 const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { isAuthenticated, user } = useSelector((state) => state.user);
   const [isHeroVisible, setIsHeroVisible] = useState(false);
   const [categories, setCategories] = useState([]);
   const [featuredItems, setFeaturedItems] = useState([]);
+  const [recommendedItems, setRecommendedItems] = useState([]);
+  const [recommendationsLoading, setRecommendationsLoading] = useState(false);
   const [promotion, setPromotion] = useState(null);
   const heroRef = useRef(null);
 
@@ -76,6 +80,42 @@ const Home = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated || user?.role !== "CUSTOMER") {
+      setRecommendedItems([]);
+      return;
+    }
+
+    const fetchRecommendations = async () => {
+      setRecommendationsLoading(true);
+      try {
+        const response = await menuAPI.getRecommendations(6);
+        const defaultImages = [
+          "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+          "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+          "https://images.unsplash.com/photo-1550547660-d9450f859349?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+          "https://images.unsplash.com/photo-1625813527987-a64d2579893d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+          "https://images.unsplash.com/photo-1551782450-a2132b4ba21d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+        ];
+
+        const normalized = (response.data || []).map((item, index) => ({
+          ...item,
+          price: parseFloat(item.base_price || 0),
+          image: defaultImages[index % defaultImages.length],
+        }));
+
+        setRecommendedItems(normalized);
+      } catch (error) {
+        console.error("Error fetching recommendations:", error);
+        setRecommendedItems([]);
+      } finally {
+        setRecommendationsLoading(false);
+      }
+    };
+
+    fetchRecommendations();
+  }, [isAuthenticated, user?.role]);
 
   const getCategoryIcon = (name) => {
     const lowerName = name.toLowerCase();
@@ -482,6 +522,107 @@ const Home = () => {
           </div>
         </Container>
       )}
+
+      {isAuthenticated && user?.role === "CUSTOMER" && (
+        <Container className="mb-5">
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h2 className="fw-bold mb-0">Recommended for You</h2>
+              <small className="text-muted">
+                Personalized picks based on your order history
+              </small>
+            </div>
+            <Button
+              variant="link"
+              className="text-danger fw-bold text-decoration-none d-flex align-items-center"
+              onClick={() => navigate("/menu")}
+            >
+              Explore Menu <FiChevronRight />
+            </Button>
+          </div>
+
+          {recommendationsLoading ? (
+            <div className="text-muted">Loading recommendations...</div>
+          ) : recommendedItems.length === 0 ? (
+            <div className="text-muted">
+              No personalized recommendations yet. Place a few orders to improve suggestions.
+            </div>
+          ) : (
+            <Row className="gy-4">
+              {recommendedItems.map((item) => (
+                <Col key={item.id} md={4} className="mb-4">
+                  <Card
+                    className="border-0 shadow-sm h-100 position-relative hover-shadow transition-all"
+                    style={{
+                      borderRadius: "15px",
+                      overflow: "hidden",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => navigate("/menu")}
+                  >
+                    <div
+                      className="position-absolute bg-danger text-white rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm"
+                      style={{
+                        width: "55px",
+                        height: "55px",
+                        top: "15px",
+                        left: "15px",
+                        zIndex: 2,
+                        fontSize: "0.9rem",
+                      }}
+                    >
+                      ${item.price.toFixed(2)}
+                    </div>
+
+                    <div
+                      className="w-100 bg-light position-relative"
+                      style={{ height: "220px" }}
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-100 h-100"
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
+
+                    <Card.Body className="d-flex flex-column p-4 bg-white">
+                      <div className="d-flex justify-content-between align-items-start mb-2">
+                        <Card.Title className="fw-bold fs-5 mb-0 text-dark">
+                          {item.name}
+                        </Card.Title>
+                      </div>
+
+                      <Card.Text className="text-muted small mb-2">
+                        {item.description}
+                      </Card.Text>
+
+                      <Badge bg="warning" text="dark" className="align-self-start mb-3">
+                        {item.reason || "Recommended"}
+                      </Badge>
+
+                      <div className="mt-auto d-flex justify-content-end">
+                        <Button
+                          variant="danger"
+                          className="rounded-circle p-0 d-flex align-items-center justify-content-center shadow-sm"
+                          style={{ width: "45px", height: "45px" }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            dispatch(addToCart({ ...item, qty: 1 }));
+                          }}
+                        >
+                          <FiShoppingCart size={20} className="text-white" />
+                        </Button>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          )}
+        </Container>
+      )}
+
       {/* Featured Items */}
       <Container>
         <div className="d-flex justify-content-between align-items-center mb-4">

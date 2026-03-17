@@ -34,7 +34,8 @@ const Header = () => {
   const { user, isAuthenticated } = useSelector((state) => state.user);
   const cartCount = cartItems.reduce((acc, item) => acc + item.qty, 0);
 
-  const isStaff = user?.role === "STAFF" || user?.role === "ADMIN";
+  const isAdmin = user?.role === "ADMIN";
+  const isStaff = user?.role === "STAFF";
 
   const handleLogout = () => {
     dispatch(logout());
@@ -137,7 +138,7 @@ const Header = () => {
           
 
             {/* Cart / Orders Icon */}
-            {isAuthenticated && !isStaff && (
+            {isAuthenticated && !isAdmin && (
               <div
                 className="position-relative cursor-pointer"
                 onClick={() => navigate("/cart")}
@@ -163,21 +164,7 @@ const Header = () => {
               </div>
             )}
 
-            {isStaff && (
-              <div
-                className="position-relative cursor-pointer"
-                onClick={() => navigate("/staff-orders")}
-                style={{ cursor: "pointer" }}
-                title="View All Orders"
-              >
-                <div
-                  className="bg-light rounded-circle d-flex align-items-center justify-content-center"
-                  style={{ width: "40px", height: "40px" }}
-                >
-                  <FiShoppingBag size={20} className="text-dark" />
-                </div>
-              </div>
-            )}
+      
 
             {/* Profile / Logout */}
             {isAuthenticated ? (

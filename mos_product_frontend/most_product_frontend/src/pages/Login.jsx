@@ -27,8 +27,7 @@ const Login = () => {
       if (user?.role === 'STAFF') {
         navigate('/staff-dashboard');
       } else if (user?.role === 'ADMIN') {
-        // You can change this to an admin specific route later
-        navigate('/staff-dashboard'); 
+        navigate('/admin-dashboard'); 
       } else {
         navigate('/');
       }

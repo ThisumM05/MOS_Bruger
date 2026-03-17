@@ -53,6 +53,8 @@ export const menuAPI = {
         return api.get(url);
     },
     getMenuItem: (id) => api.get(`/menu/menu/${id}/`),
+    getRecommendations: (limit = 8) => api.get(`/menu/menu/recommendations/?limit=${limit}`),
+    askChatbot: (message) => api.post('/menu/menu/chatbot/', { message }),
 };
 
 // Toppings API
