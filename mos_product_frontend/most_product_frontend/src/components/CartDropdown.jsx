@@ -7,6 +7,7 @@ import { removeItem } from "../redux/slices/cartSlice";
 import "./CartDropdown.css";
 
 const CartDropdown = () => {
+  const fallbackImage = `${import.meta.env.BASE_URL}image_1.jpg`;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { items, totalAmount } = useSelector((state) => state.cart);
@@ -73,7 +74,7 @@ const CartDropdown = () => {
                 className="d-flex align-items-center p-3 cart-item-row position-relative"
               >
                 <Image
-                  src={"/image_1.jpg"}
+                  src={fallbackImage}
                   rounded
                   style={{ width: "56px", height: "56px", objectFit: "cover" }}
                   className="me-3 shadow-sm"

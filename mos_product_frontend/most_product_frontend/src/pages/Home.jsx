@@ -17,6 +17,7 @@ import { menuAPI } from "../services/api";
 import axios from "axios";
 
 const Home = () => {
+  const publicBase = import.meta.env.BASE_URL;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -220,7 +221,7 @@ const Home = () => {
 
               {/* Main Burger Image */}
               <img
-                src="/burger_header.png"
+                src={`${publicBase}burger_header.png`}
                 alt="MOS Featured Burger"
                 className="position-relative z-1 img-fluid"
                 style={{
@@ -263,17 +264,17 @@ const Home = () => {
                 {/* Hover Floating Images */}
                 <div className="floating-images-container">
                   <img
-                    src="/burger_header.png"
+                    src={`${publicBase}burger_header.png`}
                     alt="latest item 1"
                     className="floating-img"
                   />
                   <img
-                    src="/burger_header.png"
+                    src={`${publicBase}burger_header.png`}
                     alt="latest item 2"
                     className="floating-img"
                   />
                   <img
-                    src="/burger_header.png"
+                    src={`${publicBase}burger_header.png`}
                     alt="latest item 3"
                     className="floating-img"
                   />
@@ -301,17 +302,17 @@ const Home = () => {
                 </h6>
                 <div className="floating-images-container">
                   <img
-                    src="/burger_header.png"
+                    src={`${publicBase}burger_header.png`}
                     alt="burger 1"
                     className="floating-img"
                   />
                   <img
-                    src="/burger_header.png"
+                    src={`${publicBase}burger_header.png`}
                     alt="burger 2"
                     className="floating-img"
                   />
                   <img
-                    src="/burger_header.png"
+                    src={`${publicBase}burger_header.png`}
                     alt="burger 3"
                     className="floating-img"
                   />
@@ -335,17 +336,17 @@ const Home = () => {
                 </h6>
                 <div className="floating-images-container">
                   <img
-                    src="/burger_header.png"
+                    src={`${publicBase}burger_header.png`}
                     alt="side 1"
                     className="floating-img"
                   />
                   <img
-                    src="/burger_header.png"
+                    src={`${publicBase}burger_header.png`}
                     alt="side 2"
                     className="floating-img"
                   />
                   <img
-                    src="/burger_header.png"
+                    src={`${publicBase}burger_header.png`}
                     alt="side 3"
                     className="floating-img"
                   />
@@ -369,17 +370,17 @@ const Home = () => {
                 </h6>
                 <div className="floating-images-container">
                   <img
-                    src="/burger_header.png"
+                    src={`${publicBase}burger_header.png`}
                     alt="drink 1"
                     className="floating-img"
                   />
                   <img
-                    src="/burger_header.png"
+                    src={`${publicBase}burger_header.png`}
                     alt="drink 2"
                     className="floating-img"
                   />
                   <img
-                    src="/burger_header.png"
+                    src={`${publicBase}burger_header.png`}
                     alt="drink 3"
                     className="floating-img"
                   />
@@ -403,17 +404,17 @@ const Home = () => {
                 </h6>
                 <div className="floating-images-container">
                   <img
-                    src="/burger_header.png"
+                    src={`${publicBase}burger_header.png`}
                     alt="dessert 1"
                     className="floating-img"
                   />
                   <img
-                    src="/burger_header.png"
+                    src={`${publicBase}burger_header.png`}
                     alt="dessert 2"
                     className="floating-img"
                   />
                   <img
-                    src="/burger_header.png"
+                    src={`${publicBase}burger_header.png`}
                     alt="dessert 3"
                     className="floating-img"
                   />

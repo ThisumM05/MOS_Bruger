@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import "./MenuCard.css";
 
 const MenuCard = ({ item }) => {
+  const fallbackImage = `${import.meta.env.BASE_URL}image_1.jpg`;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isAuthenticated } = useSelector((state) => state.user);
@@ -35,7 +36,7 @@ const MenuCard = ({ item }) => {
       base_price: parseFloat(item.base_price),
       quantity: 1,
       toppings: [],
-      image: item.image || "/image_1.jpg",
+      image: item.image || fallbackImage,
     };
 
     dispatch(addItem(cartItem));
@@ -55,7 +56,7 @@ const MenuCard = ({ item }) => {
         >
           <Card.Img
             variant="top"
-            src={"/image_1.jpg"}
+            src={fallbackImage}
             alt={item.name}
             className="h-100 w-100"
             style={{ objectFit: "cover", transition: "transform 0.5s ease", filter: item.is_available ? "none" : "grayscale(100%)" }}   
@@ -121,7 +122,7 @@ const MenuCard = ({ item }) => {
           <Row className="g-0">
             <Col md={6}>
               <img
-                src={"/image_1.jpg"}
+                src={fallbackImage}
                 alt={item.name}
                 className="w-100 h-100"
                 style={{ objectFit: "cover", minHeight: "350px" }}

@@ -82,7 +82,7 @@ const Login = () => {
           justify-content: center;
           align-items: center;
           min-height: calc(100vh - 100px);
-          background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('/image_2.jpg') no-repeat center center/cover;
+          background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('${import.meta.env.BASE_URL}image_2.jpg') no-repeat center center/cover;
           padding: 20px;
         }
 
