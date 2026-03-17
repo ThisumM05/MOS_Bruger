@@ -46,9 +46,14 @@ const MenuCard = ({ item }) => {
   return (
     <>
       <Card
-        className={`h-100 border-0 shadow-sm menu-card-hover ${!item.is_available ? 'inactive-card' : ''}`}
+        className={`h-100 border-0 shadow-sm menu-card-hover ${!item.is_available ? "inactive-card" : ""}`}
         onClick={item.is_available ? handleShow : undefined}
-        style={{ cursor: item.is_available ? "pointer" : "not-allowed", borderRadius: "16px", overflow: "hidden", opacity: item.is_available ? 1 : 0.6 }} 
+        style={{
+          cursor: item.is_available ? "pointer" : "not-allowed",
+          borderRadius: "16px",
+          overflow: "hidden",
+          opacity: item.is_available ? 1 : 0.6,
+        }}
       >
         <div
           className="overflow-hidden position-relative"
@@ -59,7 +64,11 @@ const MenuCard = ({ item }) => {
             src={fallbackImage}
             alt={item.name}
             className="h-100 w-100"
-            style={{ objectFit: "cover", transition: "transform 0.5s ease", filter: item.is_available ? "none" : "grayscale(100%)" }}   
+            style={{
+              objectFit: "cover",
+              transition: "transform 0.5s ease",
+              filter: item.is_available ? "none" : "grayscale(100%)",
+            }}
           />
         </div>
         <Card.Body className="d-flex flex-column p-4">
