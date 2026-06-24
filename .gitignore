@@ -23,10 +23,7 @@ mos_burger_db
 build/
 dist/
 
-# Django Migrations (requested by user)
-**/migrations/*.py
-!**/migrations/__init__.py
-**/migrations/*.pyc
+
 
 # Node
 node_modules/
