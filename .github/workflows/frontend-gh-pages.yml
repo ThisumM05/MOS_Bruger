@@ -30,7 +30,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: mos_product_frontend/most_product_frontend
-        run: npm ci
+        run: npm install
 
       - name: Build with repo base path
         working-directory: mos_product_frontend/most_product_frontend
