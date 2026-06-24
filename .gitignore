@@ -1,0 +1,34 @@
+# Environments
+venv/
+env/
+.env
+
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Database
+db.sqlite3
+db.sqlite3-journal
+*.sqlite3
+mos_burger_db
+
+# OS files
+.DS_Store
+
+# Build files
+*.egg-info/
+build/
+dist/
+
+# Django Migrations (requested by user)
+**/migrations/*.py
+!**/migrations/__init__.py
+**/migrations/*.pyc
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
