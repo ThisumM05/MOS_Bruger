@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// API Base URL - Adjust port if needed
-const API_URL = 'http://localhost:8000/api/users/users/';
+// Get API base URL dynamically for production vs development
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
+const API_URL = `${BASE_URL}/users/users/`;
 
 // Helper to get initial state from localStorage
 const storedToken = localStorage.getItem('token');
@@ -31,7 +32,8 @@ export const register = createAsyncThunk(
     'user/register',
     async (userData, { rejectWithValue }) => {
         try {
-            const response = await axios.post(`${API_URL}register/`, userData);
+            // In Django REST Framework, POSTing to the base viewset URL creates a new object
+            const response = await axios.post(API_URL, userData);
             return response.data;
         } catch (error) {
             if (error.response && error.response.data) {
